@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KMT NFC Reader</title>
+  <style>
+    body{
+      background:#111;
+      color:white;
+      font-family:sans-serif;
+      text-align:center;
+      margin-top:100px;
+    }
+
+    .card{
+      background:#222;
+      width:300px;
+      margin:auto;
+      padding:20px;
+      border-radius:20px;
+    }
+
+    button{
+      padding:10px 20px;
+      border:none;
+      border-radius:10px;
+      font-size:18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>KMT NFC</h1>
+
+  <button onclick="scanNFC()">
+    TAP KARTU
+  </button>
+
+  <h3 id="uid">Belum ada kartu</h3>
+  <h2 id="saldo">Saldo: -</h2>
+</div>
+
+<script>
+async function scanNFC(){
+
+  try{
+    const ndef = new NDEFReader();
+
+    await ndef.scan();
+
+    document.getElementById("uid").innerText =
+      "Tempel kartu di belakang HP";
+
+    ndef.onreading = (event)=>{
+
+      let uid = event.serialNumber;
+
+      document.getElementById("uid").innerText =
+        "UID: " + uid;
+
+      // simulasi saldo random
+      let saldo =
+        "Rp " +
+        Math.floor(Math.random()*200000);
+
+      document.getElementById("saldo").innerText =
+        "Saldo: " + saldo;
+    }
+
+  }catch(err){
+    alert("NFC gagal: " + err);
+  }
+
+}
+</script>
+
+</body>
+</html>
