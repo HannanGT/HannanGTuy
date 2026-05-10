@@ -1,78 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>KMT NFC Reader</title>
-  <style>
-    body{
-      background:#111;
-      color:white;
-      font-family:sans-serif;
-      text-align:center;
-      margin-top:100px;
-    }
-
-    .card{
-      background:#222;
-      width:300px;
-      margin:auto;
-      padding:20px;
-      border-radius:20px;
-    }
-
-    button{
-      padding:10px 20px;
-      border:none;
-      border-radius:10px;
-      font-size:18px;
-    }
-  </style>
-</head>
-<body>
-
-<div class="card">
-  <h1>KMT NFC</h1>
-
-  <button onclick="scanNFC()">
-    TAP KARTU
-  </button>
-
-  <h3 id="uid">Belum ada kartu</h3>
-  <h2 id="saldo">Saldo: -</h2>
-</div>
+<button id="scan">SCAN</button>
+<h1 id="text">-</h1>
 
 <script>
-async function scanNFC(){
+document.getElementById("scan").onclick = async () => {
 
-  try{
+  try {
+
     const ndef = new NDEFReader();
 
     await ndef.scan();
 
-    document.getElementById("uid").innerText =
-      "Tempel kartu di belakang HP";
+    document.getElementById("text").innerText =
+      "Tempel kartu";
 
-    ndef.onreading = (event)=>{
+    ndef.onreading = event => {
 
-      let uid = event.serialNumber;
+      document.getElementById("text").innerText =
+        event.serialNumber;
 
-      document.getElementById("uid").innerText =
-        "UID: " + uid;
+    };
 
-      // simulasi saldo random
-      let saldo =
-        "Rp " +
-        Math.floor(Math.random()*200000);
+  } catch(e) {
 
-      document.getElementById("saldo").innerText =
-        "Saldo: " + saldo;
-    }
+    alert(e);
 
-  }catch(err){
-    alert("NFC gagal: " + err);
   }
 
 }
 </script>
-
-</body>
-</html>
